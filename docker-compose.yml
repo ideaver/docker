@@ -1,0 +1,114 @@
+version: '3.8'
+
+services:
+
+  # mysql: 
+  #   image: mysql:latest
+  #   container_name: mysql
+  #   volumes:
+  #     - mysql-data:/var/lib/mysql
+  #   restart: always
+  #   ports:
+  #     - "3306:3306"
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - nestjs-network
+
+  # minio:
+  #   image: minio/minio
+  #   container_name: minio
+  #   volumes:
+  #     - minio-data:/data
+  #   ports:
+  #     - "9900:9000" # MinIO server 
+  #     - "9901:9001" # MinIO Console WEB GUI
+  #   env_file:
+  #     - .env
+  #   command: server --console-address ":9001" /data
+  #   networks:
+  #     - nestjs-network
+  #   restart: always
+
+  # Dozzle - Real-time Docker Log Viewer
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    restart: unless-stopped
+    networks:
+      - docker
+    ports:
+      - "8080:8080"
+    environment:
+      DOZZLE_LEVEL: info
+      DOZZLE_TAILSIZE: 300
+      DOZZLE_FILTER: "status=running"
+      # DOZZLE_FILTER: "label=log_me" # limits logs displayed to containers with this label
+      # DOCKER_HOST: tcp://socket-proxy:2375 # enable when using socket proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # disable when using socket proxy
+
+  # nginx:
+  #   container_name: nginx
+  #   image: nginx:latest
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   restart: always
+  #   volumes:
+  #     - ./volume/nginx/conf/:/etc/nginx/conf.d/:ro
+  #     - ./volume/certbot/www:/var/www/certbot/:ro
+  #     - ./volume/certbot/conf/:/etc/nginx/ssl/:ro
+  #     - data-volume:/var/www/files:ro
+  #   networks:
+  #     - nestjs-network
+
+  # certbot:
+  #   container_name: certbot
+  #   image: certbot/certbot
+  #   volumes:
+  #     - ./volume/certbot/www/:/var/www/certbot/:rw
+  #     - ./volume/certbot/conf/:/etc/letsencrypt/:rw
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce
+    ports:
+      - 9000:9000
+    restart: always
+    volumes:
+      - portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - docker
+
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins:lts-jdk11
+    restart: always
+    ports:
+      - "1111:8080"
+      - "5000:5000"
+    volumes:
+      - jenkins:/var/jenkins_home
+    ssh-agent:
+      image: jenkins/ssh-agent
+
+      # redis:
+      #   image: redis:latest
+      #   container_name: redis
+      #   ports:
+      #     - "6379:6379"
+      #   networks:
+      #     - nestjs-network
+      #   restart: always
+
+networks:
+  docker:
+
+volumes:
+  # data:
+  jenkins:
+  portainer:
+    # minio-data:
+    # mysql-data:
