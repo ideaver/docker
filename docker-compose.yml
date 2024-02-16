@@ -82,17 +82,17 @@ services:
     networks:
       - docker
 
-  jenkins:
-    container_name: jenkins
-    image: jenkins/jenkins:lts-jdk11
-    restart: always
-    ports:
-      - "1111:8080"
-      - "5000:5000"
-    volumes:
-      - jenkins:/var/jenkins_home
-    ssh-agent:
-      image: jenkins/ssh-agent
+  # jenkins:
+  #   container_name: jenkins
+  #   image: jenkins/jenkins:lts-jdk11
+  #   restart: always
+  #   ports:
+  #     - "1111:8080"
+  #     - "5000:5000"
+  #   volumes:
+  #     - jenkins:/var/jenkins_home
+  #   ssh-agent:
+  #     image: jenkins/ssh-agent
 
       # redis:
       #   image: redis:latest
@@ -108,7 +108,7 @@ networks:
 
 volumes:
   # data:
-  jenkins:
+  # jenkins:
   portainer:
     # minio-data:
     # mysql-data:
