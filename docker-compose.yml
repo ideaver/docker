@@ -111,9 +111,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - /data/caddy/Caddyfile:/etc/caddy/Caddyfile
-      - /data/caddy/data:/data
-      - /data/caddy/config:/config
+      - /caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /caddy/data:/data
+      - /caddy/config:/config
     networks:
       - docker
 
@@ -124,5 +124,5 @@ volumes:
   # data:
   # jenkins:
   portainer:
-    # minio-data:
-    # mysql-data:
+  # minio-data:
+  # mysql-data:
