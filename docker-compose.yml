@@ -111,9 +111,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - /caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./Caddyfile:/etc/caddy/Caddyfile  # Mount the actual Caddyfile file
       - /caddy/data:/data
-      - /caddy/config:/config
+      - /caddy/config:/config  # Mount the config directory if needed
     networks:
       - docker
 
